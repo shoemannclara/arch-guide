@@ -82,7 +82,9 @@ exit
 reboot
 
 5 post install config
-sudo pacman -S xorg-server xorg-xrandr i3-wm
+sudo pacman -S xorg-server xorg-xrandr i3-wm kitty
 nano ~/.xinitrc 
 add exec i3
 startx 
+xrandr | grep connected 
+xrandr --output $displayname --mode 1920x1080
