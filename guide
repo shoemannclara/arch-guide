@@ -1,0 +1,82 @@
+1. check internet connection
+- ip -a check for UP
+- ping google.com
+if internet is not connected:
+1.1 connecting using iwctl
+iwctl
+device list
+check device powered on 
+device $wlan scan
+device $wlan network-get
+device $wlan connect $network
+check internet connection 
+
+2. partion disk
+cfdisk 
+sda1 – 100M
+sda2 – 4G
+sda3 – default
+exit
+
+2.1 format partitions
+mkfs.fat -F 32 /dev/sda1
+mkswap /dev/sda2
+mkfs.ext4 /dev/sda3
+
+2.2 mount partitions
+mount /dev/$root /mnt
+swapon /dev/sda2
+mkdir /mnt/boot/efi
+mount /dev/sda1 /mnt/boot/efi
+
+3. pacstrap
+pacstrap -K /mnt base linux linux-firmware
+
+3.1 fstab
+gensftab /mnt > mnt/etc/fstab
+cat mnt/etc/fstab
+if there’s a mismatch between fstab and lsblk, mount the missing partitions 
+
+3.2 chroot
+arch-chroot /mnt
+
+3.3 time
+ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
+hwclock -systohc
+
+3.4 locale
+pacman -S nano
+nano /etc/locale.gen
+uncomment en_US.UTF.8 UTF-8
+locale-gen
+
+
+3.5 hostname
+nano /etc/hostname
+set hostname
+
+3.6 root password
+passwd
+set password
+
+4. user & sudo
+useradd -m -G wheel -s /bin/bash $user
+passwd $user
+
+4.1 sudo
+pacman -S visudo
+EDITOR=nano visudo
+unconnment %wheel
+
+4.2 network manager
+pacman -S networkmanager
+systemctl enable NetworkManager.service
+
+4.3 grub
+pacman -S grub efibootmgr
+grub-install
+error cannot find efi directory: ensure /dev/$boot is mounted at /boot/efi 
+
+4.4 reboot
+exit
+reboot
