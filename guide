@@ -33,8 +33,8 @@ mount /dev/sda1 /mnt/boot/efi
 pacstrap -K /mnt base linux linux-firmware
 
 3.1 fstab
-gensftab /mnt > mnt/etc/fstab
-cat mnt/etc/fstab
+gensftab /mnt > /mnt/etc/fstab
+cat /mnt/etc/fstab
 if there’s a mismatch between fstab and lsblk, mount the missing partitions 
 
 3.2 chroot
@@ -64,9 +64,9 @@ useradd -m -G wheel -s /bin/bash $user
 passwd $user
 
 4.1 sudo
-pacman -S visudo
+pacman -S sudo
 EDITOR=nano visudo
-unconnment %wheel
+uncomment %wheel
 
 4.2 network manager
 pacman -S networkmanager
