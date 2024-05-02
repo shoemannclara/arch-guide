@@ -36,13 +36,14 @@ pacstrap -K /mnt base linux linux-firmware
 gensftab /mnt > /mnt/etc/fstab
 cat /mnt/etc/fstab
 if there’s a mismatch between fstab and lsblk, mount the missing partitions 
+systemctl daemon-reload
 
 3.2 chroot
 arch-chroot /mnt
 
 3.3 time
 ln -sf /usr/share/zoneinfo/America/Chicago /etc/localtime
-hwclock -systohc
+hwclock --systohc
 
 3.4 locale
 pacman -S nano
@@ -76,6 +77,7 @@ systemctl enable NetworkManager.service
 pacman -S grub efibootmgr
 grub-install
 error cannot find efi directory: ensure /dev/$boot is mounted at /boot/efi 
+grub-mkconfig -o /boot/grub/grub.cfg
 
 4.4 reboot
 exit
