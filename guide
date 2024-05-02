@@ -26,15 +26,15 @@ mkfs.ext4 /dev/sda3
 2.2 mount partitions
 mount /dev/$root /mnt
 swapon /dev/sda2
-mkdir /mnt/boot/efi
-mount /dev/sda1 /mnt/boot/efi
+mkdir /boot/efi
+mount /dev/sda1 /boot/efi
 
 3. pacstrap
 pacstrap -K /mnt base linux linux-firmware
 
 3.1 fstab
-gensftab /mnt > /mnt/etc/fstab
-cat /mnt/etc/fstab
+gensftab / > /etc/fstab
+cat /etc/fstab
 if there’s a mismatch between fstab and lsblk, mount the missing partitions 
 systemctl daemon-reload
 
@@ -84,7 +84,7 @@ exit
 reboot
 
 5 post install config
-sudo pacman -S xorg-server xorg-xrandr i3-wm kitty
+sudo pacman -S xorg xorg-xinit xorg-server xorg-xrandr i3 kitty
 nano ~/.xinitrc 
 add exec i3
 startx 
